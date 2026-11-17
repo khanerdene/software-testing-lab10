@@ -26,4 +26,33 @@ class BonusTest {
         assertEquals(3, DataFlowTargets.bonus(new int[]{1, 1, 1, 1, 1}, 6));
     }
 
+    @Test
+    @DisplayName("threshold of 0 covers empty array")
+    void zeroThresholdRewardsEmptyAttendance() {
+        assertEquals(5, DataFlowTargets.bonus(new int[0], 0));
+    }//
+
+    @Test
+    @DisplayName("streak bonus and threshold bonus")
+    void mixedAttendanceWithBothRewards() {
+        assertEquals(8, DataFlowTargets.bonus(new int[]{1, 1, 1, 1, 1}, 5));
+    }//
+
+    @Test
+    @DisplayName("breaking streak gives no reward")
+    void shorterRunsDoNotEarnStreakReward() {
+        assertEquals(0, DataFlowTargets.bonus(new int[]{1, 1, 0, 1, 1, 1}, 7));
+    }//
+
+    @Test
+    @DisplayName("throws IAE on null attendance")
+    void nullAttendanceIsRejected() {
+        assertThrows(IllegalArgumentException.class, () -> DataFlowTargets.bonus(null, 0));
+    }
+
+    @Test
+    @DisplayName("throws IAE on negative threshold")
+    void negativeThresholdIsRejected() {
+        assertThrows(IllegalArgumentException.class, () -> DataFlowTargets.bonus(new int[0], -1));
+    }
 }

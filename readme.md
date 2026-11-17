@@ -53,30 +53,32 @@ gcd(12, 8) нь хоёр удаа давтана.
 
 ### B3
 
+Тэмдэглэгээ: B1=`emptyAttendanceDoesNotMeetPositiveThreshold`; B2=`absenceResetsStreakBeforeAttendance`; B3=`fiveConsecutiveDaysEarnStreakReward`; B4=`zeroThresholdRewardsEmptyAttendance`; B5=`mixedAttendanceWithBothRewards`; B6=`shorterRunsDoNotEarnStreakReward`; B7=`nullAttendanceIsRejected`; B8=`negativeThresholdIsRejected`.
+
 | Хувьсагч | Def мөр | Use мөр | Төрөл | Def-clear зам / салаа | Тест ID | Хамрагдсан |
 |---|---:|---:|---|---|---|---|
-| attendance | 31 | 32 | p-use | null T/F (баруун тал зөвхөн null биш үед үнэлэгдэнэ) |  | Тийм |
-| attendance | 31 | 38 | p-use | элемент байна/байхгүй |  | Тийм |
-| threshold | 31 | 32 | p-use | null биш оролт дээр `<0` T/F |  | Тийм |
-| threshold | 31 | 50 | p-use | 35→38→…→50, `present >= threshold` T/F |  | Тийм |
-| present | 35 | 40 | c-use | 35→38T→39T→40 |  | Тийм |
-| present | 35 | 50 | p-use | 35→38F→49→50 |  | Тийм |
-| present | 40 | 40 | c-use | 40→…→дараагийн 40 |  | Тийм |
-| present | 40 | 50 | p-use | 40→…→38F→50 |  | Тийм |
-| a | 38 | 39 (T/F) | p-use | тухайн элемент эерэг/эерэг биш |  | Тийм |
-| streak | 36 | 41 | c-use | 36→38T→39T→41 |  | Тийм |
-| streak | 41 | 41 | c-use | эерэг дараалсан элементүүдийн давталтаар |  | Тийм |
-| streak | 41 | 42 | p-use | 41→42; `streak > best` T/F |  | Тийм |
-| streak | 46 | 41 | c-use | 46→38T→39T→41 |  | Тийм |
-| best | 37 | 42 | p-use | 37→…→42 |  | Тийм |
-| best | 37 | 53 | p-use | давталтгүй: 37→38F→…→53 |  | Тийм |
-| best | 43 | 42 | p-use | 43→дараагийн эерэг элемент→42, T/F |  | Тийм |
-| best | 43 | 53 | p-use | 43→давталтын төгсгөл→53 |  | Тийм |
-| score | 49 | 54 | c-use | 49→50F→53T→54 |  | Тийм |
-| score | 49 | 56 | c-use | 49→50F→53F→56 |  | Тийм |
-| score | 51 | 54 | c-use | 51→53T→54 |  | Тийм |
-| score | 51 | 56 | c-use | 51→53F→56 |  | Тийм |
-| score | 54 | 56 | c-use | 54→56 |  | Тийм |
+| attendance | 31 | 32 | p-use | null T/F (баруун тал зөвхөн null биш үед үнэлэгдэнэ) | B7, B1, B8 | Тийм |
+| attendance | 31 | 38 | p-use | элемент байна/байхгүй | B2, B1 | Тийм |
+| threshold | 31 | 32 | p-use | null биш оролт дээр `<0` T/F | B8, B1 | Тийм |
+| threshold | 31 | 50 | p-use | 35→38→…→50, `present >= threshold` T/F | B2/B4, B1/B3/B6 | Тийм |
+| present | 35 | 40 | c-use | 35→38T→39T→40 | B2 | Тийм |
+| present | 35 | 50 | p-use | 35→38F→49→50 | B1 | Тийм |
+| present | 40 | 40 | c-use | 40→…→дараагийн 40 | B3, B5 | Тийм |
+| present | 40 | 50 | p-use | 40→…→38F→50 | B2, B3 | Тийм |
+| a | 38 | 39 (T/F) | p-use | тухайн элемент эерэг/эерэг биш | B2 | Тийм |
+| streak | 36 | 41 | c-use | 36→38T→39T→41 | B3 | Тийм |
+| streak | 41 | 41 | c-use | эерэг дараалсан элементүүдийн давталтаар | B3, B5 | Тийм |
+| streak | 41 | 42 | p-use | 41→42; `streak > best` T/F | B3 (T), B6 (F) | Тийм |
+| streak | 46 | 41 | c-use | 46→38T→39T→41 | B2 | Тийм |
+| best | 37 | 42 | p-use | 37→…→42 | B2, B3 | Тийм |
+| best | 37 | 53 | p-use | давталтгүй: 37→38F→…→53 | B1 | Тийм |
+| best | 43 | 42 | p-use | 43→дараагийн эерэг элемент→42, T/F | B3 (T), B6 (F) | Тийм |
+| best | 43 | 53 | p-use | 43→давталтын төгсгөл→53 | B2, B3, B6 | Тийм |
+| score | 49 | 54 | c-use | 49→50F→53T→54 | B3 | Тийм |
+| score | 49 | 56 | c-use | 49→50F→53F→56 | B1 | Тийм |
+| score | 51 | 54 | c-use | 51→53T→54 | B5 | Тийм |
+| score | 51 | 56 | c-use | 51→53F→56 | B2 | Тийм |
+| score | 54 | 56 | c-use | 54→56 | B3, B5 | Тийм |
 
 **Kill ба биелэшгүй хосууд.** Мөр 46-ын `streak=0` нь 36 болон өмнөх 41-ийн def-ийг kill хийнэ. Гэхдээ 46-аас 42 руу def-clear зам байхгүй: дараагийн элемент байгаа бол 41-ийн уншилт, дахин def 42-оос өмнө орно; тасалбал 46 дахин def болно. Иймд `streak(36/46)->42` нь DU хос биш. Мөн эерэг өдрийн дараах `streak(41)->42`-ын хооронд 41 дараагийн эерэг дээр дахин def болно, харин таслалт 42-ыг алгасч 46-д хүргэнэ. `present(35)->50` зөвхөн эерэг өдөргүй замаар боломжтой; эерэг өдөр байвал 40 def нь 35-ыг kill хийнэ. `attendance` null үед `||` short circuit-с болж `threshold < 0` үнэлэгдэхгүй; тиймээс attendance-ийн эхний нөхцөлийн null-T болон threshold-ийн нөхцөлийн T-г нэг замаар авах боломжгүй.
 
