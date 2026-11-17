@@ -86,4 +86,23 @@ gcd(12, 8) нь хоёр удаа давтана.
 
 All-defs шатанд хамгийн багадаа **3 bonus тест** хэрэгтэй: `score`-ийн 49, 51, 54-р мөрийн def-үүд нэг гүйцэтгэлд хоорондоо дараалан kill хийгдэх тул тус бүрийг return/use-д хүргэх тусдаа зам шаардана. B1 нь 49→56, B2 нь 51→56, B3 нь 54→56 хосыг хамарна. Эдгээрт G1–G3 нэмэгдэж `mvn verify` нийт **6 тест** ажиллуулсан.
 
-### B5
+| Гүйлт | `Tests run` | JaCoCo Branch | JaCoCo Line |
+|---|---:|---:|---:|
+| All-defs (`results/mvn-verify-alldefs.txt`, `jacoco-alldefs.csv`) | 6 | 13/16 хамрагдсан, 3 missed | 22 covered, 2 missed |
+| Эцсийн all-DU-pairs (`results/mvn-verify-final.txt`, `jacoco-final.csv`) | 11 | 16/16 хамрагдсан, 0 missed | 24 covered, 1 missed |   
+
+Эцсийн ганц мөрийн miss нь зааварт дурдсан 7-р мөрийн далд constructor. Эхний all-defs гүйлт 100% branch биш (`13/16`) хэдий ч бүх def-ийг use-д хүргэсэн. Харин зөвхөн branch 100% нь DU-г батлахгүй: `gcd(12,8)` нь while-ийн T ба F салааг хоёуланг хамарна, гэхдээ `x`-ийн параметрийн def (13) return (20)-д хүрэх хосыг хамрахгүй; энэ хосод `gcd(7,0)` хэрэгтэй. JaCoCo бол салбарын хэмжүүр, DU хүснэгтийг орлохгүй.
+
+
+## C. Fault seeding
+
+Мутацийн туршилт бүрийн дараа эх файлыг байтаар нь анхны хувилбараар сэргээсэн. `results/mvn-test-*.txt` нь тус бүрийн бүтэн гаралт.
+
+| Мутаци | Үр дүн | Ажиглагдсан тест / үр дүн |
+|---|---|---|
+| M1 — 41-р мөрийн `streak = streak + 1`-ийг арилгах | Илэрсэн | `fiveConsecutiveDaysEarnStreakReward`: expected 3, was 0; `mixedAttendanceWithBothRewards`: expected 8, was 5. |
+| M2 — 43-р мөрийн `best = streak`-ийг `best = present` болгох | Илэрсэн | `shorterRunsDoNotEarnStreakReward`: expected 0, was 3. `[1,1,0,1,1,1]`-д хамгийн урт цуваа 3, нийт ирц 5; алдаатай def нь 5 болгож, байхгүй 3 онооны урамшуулал олгосон. |
+| M3 — ашиглагдаагүй `int total = present + best;` def нэмэх | Тест илрүүлээгүй | 11 тест бүгд амжилттай. `total` үр дүнд нөлөөлөх use-гүй dead definition тул runtime тест хариу өөрчлөхгүй. |
+
+M3-ийг илрүүлэхэд статик анализ/IDE-ийн unused-local буюу dead-store inspection тохирно; `javac`-ийн энгийн compile болон JUnit үүнийг заавал анхааруулахгүй. Энэ орчинд IDE-ийн Problems самбарын бодит анхааруулгыг авч хавсаргаагүй бөгөөд төсөлд нэмэлт статик анализатор тохируулаагүй.
+
